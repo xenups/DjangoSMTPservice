@@ -26,10 +26,10 @@ class SMTPService(object):
     required_config_fields = ['username', 'password', 'host', 'port']
 
     def __init__(self, mail_config: MailConfig):
-        self.mail_config: MailConfig = mail_config
-        self._set_tls(self.mail_config.config.get('tls'))
-        self._smtp_service = smtplib.SMTP(self.mail_config.config['host'], self.mail_config.config['port'])
-        self._smtp_service.login(self.mail_config.username, self.mail_config.password)
+        self._mail_config: MailConfig = mail_config
+        self._set_tls(self._mail_config.config.get('tls'))
+        self._smtp_service = smtplib.SMTP(self._mail_config.config['host'], self._mail_config.config['port'])
+        self._smtp_service.login(self._mail_config.username, self._mail_config.password)
 
     def send_mail(self, subject: str, receiver: list, html_msg: str, filepath=None, filename=None, quite=True):
         mails = []
@@ -42,7 +42,7 @@ class SMTPService(object):
     def _create_mail_body(self, subject: str, address: str, html_msg) -> MIMEMultipart:
         message = MIMEMultipart()
         message['Subject'] = email.header.Header(force_text(subject), 'utf-8')
-        message['From'] = self.mail_config.from_email
+        message['From'] = self._mail_config.from_email
         message['To'] = address
         message = self._add_aws_headers(message)
         body = MIMEText(html_msg.encode('utf-8'), 'html', 'utf-8')
@@ -90,7 +90,7 @@ class SMTPService(object):
             self._smtp_service.starttls()
 
     def _add_aws_headers(self, message):
-        if self.mail_config.provider == 'AWS':
+        if self._mail_config.provider == 'AWS':
             if settings.SES_CONFIGURATION_SET:
                 message['X-SES-CONFIGURATION-SET'] = settings.SES_CONFIGURATION_SET
         return message
