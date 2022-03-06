@@ -10,7 +10,8 @@ from email.mime.application import MIMEApplication
 
 
 class MailConfig:
-    def __init__(self, user_name, password, provider, from_email=None, reply_email=None, config=None):
+    def __init__(self, user_name: str, password: str, provider: str, from_email: str = None, reply_email: str = None,
+                 config: dict = None):
         self.username = user_name
         self.password = password
         self.provider = provider
