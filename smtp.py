@@ -16,7 +16,7 @@ class MailConfig:
         self.password = password
         self.provider = provider
         self.from_email = from_email or settings.DEFAULT_FROM_EMAIL
-        self.reply_email = reply_email or None
+        self.reply_email = reply_email
         self.config = config or settings.DEFAULT_EMAIL_CONFIG
 
 
